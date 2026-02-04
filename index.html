@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Calmify</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+/* ---------- BASE ---------- */
+body{
+  margin:0;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background:white;
+  color:#1f2937;
+  overflow:hidden;
+}
+
+/* ---------- AURORA ---------- */
+.aurora{
+  position:fixed;
+  inset:0;
+  background:
+    radial-gradient(circle at 30% 30%, rgba(147,197,253,0.25), transparent 60%),
+    radial-gradient(circle at 70% 60%, rgba(196,181,253,0.25), transparent 60%);
+  animation: auroraMove 20s ease-in-out infinite;
+  z-index:-1;
+}
+@keyframes auroraMove{
+  0%{filter:hue-rotate(0deg);}
+  50%{filter:hue-rotate(20deg);}
+  100%{filter:hue-rotate(0deg);}
+}
+
+/* ---------- LAYOUT ---------- */
+.screen{
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+.container{
+  max-width:1000px;
+  width:100%;
+  padding:40px;
+  display:flex;
+  gap:40px;
+  align-items:flex-start;
+}
+
+/* ---------- BUDDY ---------- */
+.buddy{
+  width:200px;
+  text-align:center;
+}
+.buddy-face{
+  width:140px;
+  height:140px;
+  margin:auto;
+  border-radius:50%;
+  background:linear-gradient(#fefefe,#e5e7eb);
+  box-shadow:0 15px 30px rgba(0,0,0,0.15);
+  animation: float 4s ease-in-out infinite;
+  cursor:pointer;
+}
+@keyframes float{
+  0%,100%{transform:translateY(0);}
+  50%{transform:translateY(-8px);}
+}
+.buddy-eyes{
+  margin-top:45px;
+}
+.eye{
+  display:inline-block;
+  width:12px;
+  height:12px;
+  background:#111827;
+  border-radius:50%;
+  margin:0 10px;
+}
+.buddy-mouth{
+  width:30px;
+  height:10px;
+  border-bottom:3px solid #111827;
+  border-radius:0 0 30px 30px;
+  margin:15px auto 0;
+}
+.buddy-hint{
+  margin-top:10px;
+  font-size:14px;
+  opacity:0.6;
+}
+
+/* ---------- BOOK ---------- */
+.book{
+  flex:1;
+}
+h1{
+  font-weight:600;
+  margin-bottom:10px;
+}
+.controls{
+  display:flex;
+  gap:10px;
+  margin-bottom:20px;
+}
+select,button{
+  padding:10px 14px;
+  border-radius:10px;
+  border:1px solid #d1d5db;
+  background:white;
+  cursor:pointer;
+}
+button.primary{
+  background:#2563eb;
+  color:white;
+  border:none;
+}
+.book-text{
+  font-size:20px;
+  line-height:1.8;
+  white-space:pre-wrap;
+  background:white;
+  padding:25px;
+  border-radius:16px;
+  box-shadow:0 10px 30px rgba(0,0,0,0.08);
+  min-height:300px;
+}
+
+/* ---------- NAV ---------- */
+.nav{
+  margin-top:20px;
+  display:flex;
+  justify-content:space-between;
+}
+</style>
+</head>
+
+<body>
+<div class="aurora"></div>
+
+<div class="screen">
+  <div class="container">
+
+    <!-- BUDDY -->
+    <div class="buddy">
+      <div class="buddy-face" onclick="petBuddy()">
+        <div class="buddy-eyes">
+          <span class="eye"></span>
+          <span class="eye"></span>
+        </div>
+        <div class="buddy-mouth"></div>
+      </div>
+      <div class="buddy-hint">Click to pet me</div>
+    </div>
+
+    <!-- BOOK -->
+    <div class="book">
+      <h1>Calmify</h1>
+
+      <div class="controls">
+        <select onchange="setVoice(this.value)">
+          <option value="0">Soft Female</option>
+          <option value="1">Warm Female</option>
+          <option value="2">Calm Male</option>
+          <option value="3">Neutral</option>
+        </select>
+
+        <select onchange="setReadMode(this.value)">
+          <option value="buddy">Buddy reads</option>
+          <option value="silent">I'll read</option>
+        </select>
+
+        <button class="primary" onclick="startSession()">Start session</button>
+      </div>
+
+      <div id="bookText" class="book-text">
+        Press “Start session” to begin your calming book.
+      </div>
+
+      <div class="nav">
+        <button onclick="prevPage()">Previous</button>
+        <button onclick="nextPage()">Next</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+/* ---------- AI BLUEPRINT (LOCAL GENERATION) ---------- */
+function generateBlueprint(){
+  const emotions=[
+    ["overwhelmed","slowing","grounded","safe","peaceful"],
+    ["tense","softening","steady","relaxed","secure"]
+  ];
+  const themes=["white skies","quiet light","soft mornings","open space"];
+
+  return {
+    theme: themes[Math.floor(Math.random()*themes.length)],
+    emotion_arc: emotions[Math.floor(Math.random()*emotions.length)],
+    chapters:[
+      "Arriving",
+      "Letting go",
+      "Breathing space",
+      "Settling",
+      "Rest"
+    ],
+    vocabulary:{
+      nouns:["air","light","space","warmth","stillness"],
+      verbs:["drifting","softening","settling","floating","resting"],
+      adjectives:["gentle","quiet","safe","steady","calm"]
+    }
+  };
+}
+
+/* ---------- BOOK EXPANSION ---------- */
+let blueprint;
+let pages=[];
+let pageIndex=0;
+let readMode="buddy";
+let voiceIndex=0;
+
+function buildBook(bp){
+  const out=[];
+  bp.chapters.forEach((ch,i)=>{
+    for(let p=0;p<4;p++){
+      out.push(`
+${ch}
+
+You may notice yourself ${pick(bp.vocabulary.verbs)}.
+The ${pick(bp.vocabulary.nouns)} feels ${pick(bp.vocabulary.adjectives)}.
+Nothing needs your attention right now.
+You are allowed to take your time.
+      `.trim());
+    }
+  });
+  return out;
+}
+
+function pick(a){return a[Math.floor(Math.random()*a.length)];}
+
+/* ---------- SESSION ---------- */
+function startSession(){
+  blueprint=generateBlueprint();
+  pages=buildBook(blueprint);
+  pageIndex=0;
+  showPage();
+  speak("I'm here with you. We can go slowly.");
+}
+
+/* ---------- DISPLAY ---------- */
+function showPage(){
+  const text=pages[pageIndex];
+  document.getElementById("bookText").textContent=text;
+  if(readMode==="buddy") speak(text);
+}
+function nextPage(){ if(pageIndex<pages.length-1){pageIndex++; showPage();}}
+function prevPage(){ if(pageIndex>0){pageIndex--; showPage();}}
+
+/* ---------- VOICE ---------- */
+function setVoice(v){ voiceIndex=Number(v); }
+function setReadMode(m){ readMode=m; }
+
+function speak(text){
+  if(readMode!=="buddy") return;
+  speechSynthesis.cancel();
+  const u=new SpeechSynthesisUtterance(text);
+  const voices=speechSynthesis.getVoices();
+  u.voice=voices[voiceIndex]||voices[0];
+  u.rate=0.9;
+  u.pitch=1;
+  speechSynthesis.speak(u);
+}
+
+/* ---------- BUDDY ---------- */
+function petBuddy(){
+  speak("That feels nice. You're doing really well.");
+}
+</script>
+
+</body>
+</html>
