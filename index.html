@@ -2,137 +2,185 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Calmify</title>
-
+<title>Calmify AI</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
 /* ---------- BASE ---------- */
-body{
-  margin:0;
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  background:white;
-  color:#1f2937;
-  overflow:hidden;
+body {
+  margin: 0;
+  font-family: "Segoe UI", "Helvetica Neue", sans-serif;
+  background: #ffffff;
+  color: #1f2937;
+  overflow-x: hidden;
 }
 
 /* ---------- AURORA ---------- */
-.aurora{
-  position:fixed;
-  inset:0;
+.aurora {
+  position: fixed;
+  inset: 0;
   background:
     radial-gradient(circle at 30% 30%, rgba(147,197,253,0.25), transparent 60%),
     radial-gradient(circle at 70% 60%, rgba(196,181,253,0.25), transparent 60%);
-  animation: auroraMove 20s ease-in-out infinite;
-  z-index:-1;
+  animation: auroraMove 25s ease-in-out infinite;
+  z-index: -1;
 }
-@keyframes auroraMove{
-  0%{filter:hue-rotate(0deg);}
-  50%{filter:hue-rotate(20deg);}
-  100%{filter:hue-rotate(0deg);}
+@keyframes auroraMove {
+  0%, 100% { filter: hue-rotate(0deg); }
+  50% { filter: hue-rotate(20deg); }
 }
 
 /* ---------- LAYOUT ---------- */
-.screen{
-  min-height:100vh;
-  display:flex;
-  align-items:center;
-  justify-content:center;
+.screen {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
-.container{
-  max-width:1000px;
-  width:100%;
-  padding:40px;
-  display:flex;
-  gap:40px;
-  align-items:flex-start;
+
+.container {
+  max-width: 1100px;
+  width: 100%;
+  padding: 40px;
+  display: flex;
+  gap: 50px;
+  align-items: flex-start;
+  justify-content: center;
 }
 
 /* ---------- BUDDY ---------- */
-.buddy{
-  width:200px;
-  text-align:center;
+.buddy {
+  width: 220px;
+  text-align: center;
 }
-.buddy-face{
-  width:140px;
-  height:140px;
-  margin:auto;
-  border-radius:50%;
-  background:linear-gradient(#fefefe,#e5e7eb);
-  box-shadow:0 15px 30px rgba(0,0,0,0.15);
+
+.buddy-face {
+  width: 160px;
+  height: 160px;
+  margin: auto;
+  border-radius: 50%;
+  background: linear-gradient(#fefefe, #e5e7eb);
+  box-shadow: 0 20px 40px rgba(0,0,0,0.15);
   animation: float 4s ease-in-out infinite;
-  cursor:pointer;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
-@keyframes float{
-  0%,100%{transform:translateY(0);}
-  50%{transform:translateY(-8px);}
+
+@keyframes float {
+  0%,100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
 }
-.buddy-eyes{
-  margin-top:45px;
+
+.buddy-eyes {
+  display: flex;
+  justify-content: space-between;
+  width: 50%;
+  margin-top: 20px;
 }
-.eye{
-  display:inline-block;
-  width:12px;
-  height:12px;
-  background:#111827;
-  border-radius:50%;
-  margin:0 10px;
+
+.eye {
+  width: 14px;
+  height: 14px;
+  background: #111827;
+  border-radius: 50%;
 }
-.buddy-mouth{
-  width:30px;
-  height:10px;
-  border-bottom:3px solid #111827;
-  border-radius:0 0 30px 30px;
-  margin:15px auto 0;
+
+.buddy-mouth {
+  width: 40px;
+  height: 12px;
+  border-bottom: 3px solid #111827;
+  border-radius: 0 0 30px 30px;
+  margin-top: 20px;
 }
-.buddy-hint{
-  margin-top:10px;
-  font-size:14px;
-  opacity:0.6;
+
+.buddy-hint {
+  margin-top: 12px;
+  font-size: 14px;
+  opacity: 0.6;
 }
 
 /* ---------- BOOK ---------- */
-.book{
-  flex:1;
+.book {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 }
-h1{
-  font-weight:600;
-  margin-bottom:10px;
+
+h1 {
+  font-weight: 600;
+  margin-bottom: 10px;
+  font-size: 32px;
+  color: #1e40af;
 }
-.controls{
-  display:flex;
-  gap:10px;
-  margin-bottom:20px;
+
+.controls {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
 }
-select,button{
-  padding:10px 14px;
-  border-radius:10px;
-  border:1px solid #d1d5db;
-  background:white;
-  cursor:pointer;
+
+select, button {
+  padding: 10px 16px;
+  border-radius: 12px;
+  border: 1px solid #d1d5db;
+  background: #f9fafb;
+  cursor: pointer;
+  font-size: 14px;
 }
-button.primary{
-  background:#2563eb;
-  color:white;
-  border:none;
+
+button.primary {
+  background: #2563eb;
+  color: white;
+  border: none;
+  font-weight: 600;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  transition: transform 0.2s, box-shadow 0.2s;
 }
-.book-text{
-  font-size:20px;
-  line-height:1.8;
-  white-space:pre-wrap;
-  background:white;
-  padding:25px;
-  border-radius:16px;
-  box-shadow:0 10px 30px rgba(0,0,0,0.08);
-  min-height:300px;
+
+button.primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(0,0,0,0.15);
+}
+
+.book-text {
+  font-size: 20px;
+  line-height: 1.8;
+  white-space: pre-wrap;
+  background: #ffffff;
+  padding: 30px;
+  border-radius: 20px;
+  box-shadow: 0 15px 30px rgba(0,0,0,0.08);
+  min-height: 350px;
+  transition: background 0.3s;
 }
 
 /* ---------- NAV ---------- */
-.nav{
-  margin-top:20px;
-  display:flex;
-  justify-content:space-between;
+.nav {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
 }
+
+.nav button {
+  flex: 1;
+  margin: 0 5px;
+  background: #34d399;
+  color: white;
+  border: none;
+  border-radius: 12px;
+  padding: 10px 0;
+  font-weight: 600;
+  transition: transform 0.2s;
+}
+
+.nav button:hover {
+  transform: translateY(-2px);
+}
+
 </style>
 </head>
 
@@ -159,14 +207,14 @@ button.primary{
       <h1>Calmify</h1>
 
       <div class="controls">
-        <select onchange="setVoice(this.value)">
+        <select onchange="selectedVoiceIndex = Number(this.value)">
           <option value="0">Soft Female</option>
           <option value="1">Warm Female</option>
           <option value="2">Calm Male</option>
           <option value="3">Neutral</option>
         </select>
 
-        <select onchange="setReadMode(this.value)">
+        <select onchange="readMode = this.value">
           <option value="buddy">Buddy reads</option>
           <option value="silent">I'll read</option>
         </select>
@@ -188,7 +236,7 @@ button.primary{
 </div>
 
 <script>
-/* ---------- AI BLUEPRINT (LOCAL GENERATION) ---------- */
+/* ---------- AI BLUEPRINT ---------- */
 function generateBlueprint(){
   const emotions=[
     ["overwhelmed","slowing","grounded","safe","peaceful"],
@@ -199,13 +247,7 @@ function generateBlueprint(){
   return {
     theme: themes[Math.floor(Math.random()*themes.length)],
     emotion_arc: emotions[Math.floor(Math.random()*emotions.length)],
-    chapters:[
-      "Arriving",
-      "Letting go",
-      "Breathing space",
-      "Settling",
-      "Rest"
-    ],
+    chapters:["Arriving","Letting go","Breathing space","Settling","Rest"],
     vocabulary:{
       nouns:["air","light","space","warmth","stillness"],
       verbs:["drifting","softening","settling","floating","resting"],
@@ -215,11 +257,8 @@ function generateBlueprint(){
 }
 
 /* ---------- BOOK EXPANSION ---------- */
-let blueprint;
-let pages=[];
-let pageIndex=0;
-let readMode="buddy";
-let voiceIndex=0;
+let blueprint, pages=[], pageIndex=0;
+let readMode="buddy", selectedVoiceIndex=0;
 
 function buildBook(bp){
   const out=[];
@@ -238,7 +277,7 @@ You are allowed to take your time.
   return out;
 }
 
-function pick(a){return a[Math.floor(Math.random()*a.length)];}
+function pick(arr){return arr[Math.floor(Math.random()*arr.length)];}
 
 /* ---------- SESSION ---------- */
 function startSession(){
@@ -246,38 +285,55 @@ function startSession(){
   pages=buildBook(blueprint);
   pageIndex=0;
   showPage();
-  speak("I'm here with you. We can go slowly.");
+  buddySpeak("I'm here with you. We can go slowly.");
 }
 
 /* ---------- DISPLAY ---------- */
 function showPage(){
   const text=pages[pageIndex];
   document.getElementById("bookText").textContent=text;
-  if(readMode==="buddy") speak(text);
+
+  if(readMode==="buddy"){
+    if(pageIndex===0) buddySpeak("Let's start our calming journey together.");
+    else if(pageIndex===pages.length-1) buddySpeak("Well done! You’re safe and calm.");
+    else buddySpeak("Take your time reading this part quietly.");
+  }
 }
+
 function nextPage(){ if(pageIndex<pages.length-1){pageIndex++; showPage();}}
 function prevPage(){ if(pageIndex>0){pageIndex--; showPage();}}
 
-/* ---------- VOICE ---------- */
-function setVoice(v){ voiceIndex=Number(v); }
-function setReadMode(m){ readMode=m; }
+/* ---------- ENHANCED VOICE ---------- */
+function getBestVoice() {
+  const voices=speechSynthesis.getVoices();
+  return voices.find(v=> /natural|neural|samantha|aria|alloy/i.test(v.name))||voices[0];
+}
 
-function speak(text){
+function speakNatural(text){
   if(readMode!=="buddy") return;
   speechSynthesis.cancel();
-  const u=new SpeechSynthesisUtterance(text);
-  const voices=speechSynthesis.getVoices();
-  u.voice=voices[voiceIndex]||voices[0];
-  u.rate=0.9;
-  u.pitch=1;
-  speechSynthesis.speak(u);
+
+  const voice=getBestVoice();
+  const sentences=text.match(/[^.!?]+[.!?]+|[^.!?]+$/g);
+  if(!sentences) return;
+
+  sentences.forEach((s,i)=>{
+    setTimeout(()=>{
+      const u=new SpeechSynthesisUtterance(s.trim());
+      u.voice=voice;
+      u.rate=0.85;
+      u.pitch=1.0;
+      u.volume=0.9;
+      speechSynthesis.speak(u);
+    }, i*1200);
+  });
 }
 
-/* ---------- BUDDY ---------- */
-function petBuddy(){
-  speak("That feels nice. You're doing really well.");
-}
+function buddySpeak(text){ speakNatural(text); }
+
+/* ---------- BUDDY INTERACTIONS ---------- */
+function petBuddy(){ buddySpeak("That feels nice. You're doing really well."); }
+
 </script>
-
 </body>
 </html>
